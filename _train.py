@@ -57,8 +57,8 @@ def test_path(u, v, amount=100, max_steps=10):
 
 base_dir = './'
 snapshots_dir = os.path.join(base_dir, 'snapshots')
-results_dir = os.path.join(base_dir, 'weights')
-os.makedirs(results_dir, exist_ok=True)
+weights_dir = os.path.join(base_dir, 'weights')
+os.makedirs(weights_dir, exist_ok=True)
 
 sample = nx.read_gpickle(os.path.join(snapshots_dir, f'graph-sample-{subgraph}.pickle'))
 G = sample['undirected_graph']
@@ -69,9 +69,9 @@ for i in sample['samples'].keys():
         print(f'i: {i}, n: {len(g.nodes)}, e: {len(g.edges)}, max_neighbors: {max_neighbors(g)}')
 print('')
 
-max_steps=10
-total_timesteps=1e5
-approach='PPO'
+# max_steps=10
+# total_timesteps=1e5
+# approach='PPO'
 
 for a in range(attempts):
     g = sample['samples'][idx]['subgraph']
@@ -88,22 +88,22 @@ for a in range(attempts):
     e_ = LNEnv(g, [], G, max_steps=max_steps, train=False)
     #check_env(e)
 
-    lf = os.path.join(results_dir, f'{approach}-{k}-{version}-{subgraph}-{idx}.log')
+    lf = os.path.join(weights_dir, f'{approach}-{k}-{version}-{subgraph}-{idx}.log')
     log = pd.read_csv(lf, sep=';', compression='zip') if os.path.exists(lf) else None
-    f = os.path.join(results_dir, f'{approach}-{k}-{version}-{subgraph}-{idx}.sav')
+    f = os.path.join(weights_dir, f'{approach}-{k}-{version}-{subgraph}-{idx}.sav')
 
     if approach == 'PPO':
-        _approach = PPO
+        model_class = PPO
     else:
-        _approach = None
+        model_class = None
         print(f'{approach} - not implemented!')
-        sys.exit(0)
+        raise ValueError
 
-    if os.path.exists(f) and _approach:
-        model = _approach.load(f, e, force_reset=False)
-        print(f'loaded: {f}')
+    if os.path.exists(f) and model_class:
+        model = model_class.load(f, e, force_reset=False)
+        print(f'{approach}-model is loaded: {f}')
     else:
-        model = _approach("MultiInputPolicy", e) 
+        model = model_class("MultiInputPolicy", e) 
             
     for epoch in range(1, epochs + 1):
         model.learn(total_timesteps=total_timesteps, progress_bar=True)
