@@ -120,7 +120,7 @@ class RLRouting():
 
                 start_time = time.time()        
                 obs = self.env.reset()
-                action, _states = self.model.predict(obs, deterministic=False)
+                action, _states = self.model.predict(obs, deterministic=True)
                 obs, reward, done, info = self.env.step(action)
                 if self.env.check_path():
                         r["path"] = self.env.get_path()
@@ -218,6 +218,7 @@ base_dir = './'
 snapshots_dir = os.path.join(base_dir, 'snapshots')
 weights_dir = os.path.join(base_dir, 'weights')
 results_dir = os.path.join(base_dir, 'results')
+os.makedirs(results_dir, exist_ok=True)
     
 algorithms = {'RLA': None,
               'LND': LNDRouting(),

@@ -55,6 +55,8 @@ def test_path(u, v, amount=100, max_steps=10):
 base_dir = './'
 snapshots_dir = os.path.join(base_dir, 'snapshots')
 weights_dir = os.path.join(base_dir, 'weights')
+results_dir = os.path.join(base_dir, 'results')
+os.makedirs(results_dir, exist_ok=True)
 os.makedirs(weights_dir, exist_ok=True)
 
 sample = nx.read_gpickle(os.path.join(snapshots_dir, f'graph-sample-{subgraph}.pickle'))
@@ -85,7 +87,7 @@ for a in range(attempts):
     e_ = LNEnv(g, [], G, max_steps=max_steps, train=False)
     #check_env(e)
 
-    lf = os.path.join(weights_dir, f'{approach}-{k}-{version}-{subgraph}-{idx}.log')
+    lf = os.path.join(results_dir, f'{approach}-{k}-{version}-{subgraph}-{idx}.log')
     log = pd.read_csv(lf, sep=';', compression='zip') if os.path.exists(lf) else None
     f = os.path.join(weights_dir, f'{approach}-{k}-{version}-{subgraph}-{idx}.sav')
 
