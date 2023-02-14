@@ -4,7 +4,6 @@ import pandas as pd
 import os, sys, time, pickle, glob, random
 from tqdm import tqdm
 import argparse
-from stable_baselines3.common.env_checker import check_env
 from stable_baselines3 import PPO, A2C, DDPG, TD3, SAC
 from codecarbon import EmissionsTracker, OfflineEmissionsTracker
 # https://github.com/mlco2/codecarbon#start-to-estimate-your-impact-
@@ -15,11 +14,11 @@ from clightning import CLightningRouting
 from lnd import LNDRouting
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--attempts', default=1, type=int)
+parser.add_argument('--agents', default=6, type=int)
 parser.add_argument('--max_steps', default=10, type=int)
 args = parser.parse_args()
 
-attempts = args.attempts
+agents = args.agents
 max_steps = args.max_steps
 
 routingObj = None
@@ -232,9 +231,8 @@ samples = [100]#, 300, 500]
 subsets = ['centralized']
 versions = ['_env']
 approaches = ['PPO']
-max_idx = 5
 
-for at in range(attempts):
+for ag in range(agents):
     if os.path.exists(os.path.join(results_dir, 'emissions.csv')): 
         print('...remove old emissions.csv')
         os.remove(os.path.join(results_dir, 'emissions.csv'))
@@ -258,15 +256,12 @@ for at in range(attempts):
             
             random.seed(48)
             for algorithm, _routingObj in tqdm(algorithms.items(), leave=False):
-                for idx, s_ in tqdm(snapshot_.items(), leave=False):         
-                    subgraph = s_['subgraph'].copy()
-                    tx_set = s_['subgraph_transactions']
-                    if idx > max_idx:
-                        break
+                    subgraph = snapshot_[ag]['subgraph'].copy()
+                    tx_set = snapshot_[ag]['subgraph_transactions']
                     if algorithm == 'RLA':
                         for a in approaches:
                             for v in versions:
-                                f = os.path.join(weights_dir, f'{a}-{s}-{v}-{i}.sav')
+                                f = os.path.join(weights_dir, f'{a}-{s}-{v}-{i}-{ag}.sav')
                                 best_score_file_name = sorted(glob.glob(f + '*'))
                                 best_score_file_name = best_score_file_name[-1] if best_score_file_name else None
                                 best_score = float(best_score_file_name.split('.sav')[1]) if best_score_file_name else 0
@@ -276,12 +271,12 @@ for at in range(attempts):
                                     if f"{algorithm}:{a}:{v}-{s}-{i}" not in alg_results:
                                         alg_results[f"{algorithm}:{a}:{v}-{s}-{i}"] = []
                                     alg_results[f"{algorithm}:{a}:{v}-{s}-{i}"] += track_emissions(subgraph, tx_set, routingObj, routingObj.name())
-                                    emissions_idx.append(f"{algorithm}:{a}:{v}-{s}-{i}-{idx}")
+                                    emissions_idx.append(f"{algorithm}:{a}:{v}-{s}-{i}-{ag}")
                     else:
                         if f"{algorithm}-{s}-{i}" not in alg_results:
                             alg_results[f"{algorithm}-{s}-{i}"] = []
                         alg_results[f"{algorithm}-{s}-{i}"] += track_emissions(to_bidirected(subgraph), tx_set, _routingObj, _routingObj.name())
-                        emissions_idx.append(f"{algorithm}-{s}-{i}-{idx}")
+                        emissions_idx.append(f"{algorithm}-{s}-{i}-{ag}")
 
     if os.path.exists(os.path.join(results_dir, 'emissions.csv')): 
         e = pd.read_csv(os.path.join(results_dir, 'emissions.csv'))
@@ -292,7 +287,7 @@ for at in range(attempts):
         alg_results['emissions'] = e.to_dict()
         os.remove(os.path.join(results_dir, 'emissions.csv'))
 
-    with open(os.path.join(results_dir, f'results-{at}.pickle'), 'wb') as f:
+    with open(os.path.join(results_dir, f'results-{ag}.pickle'), 'wb') as f:
             pickle.dump(alg_results, f)
 
 print('done')
