@@ -1,9 +1,8 @@
 import networkx as nx
 import numpy as np
 import pandas as pd
-import os, sys, time, pickle, glob, random
+import os, sys, time, pickle, glob, random, argparse
 from tqdm import tqdm
-import argparse
 from stable_baselines3 import PPO, A2C, DDPG, TD3, SAC
 from codecarbon import EmissionsTracker, OfflineEmissionsTracker
 # https://github.com/mlco2/codecarbon#start-to-estimate-your-impact-
