@@ -186,7 +186,7 @@ for c in changes:
             model.learn(total_timesteps=total_timesteps, progress_bar=True)
 
         em = {}
-        if os.path.exists(os.path.join(results_dir, 'emissions.csv')): 
+        if estimate_emission and os.path.exists(os.path.join(results_dir, 'emissions.csv')): 
             em = pd.read_csv(os.path.join(results_dir, 'emissions.csv'))
             em = em[['timestamp', 'duration', 'emissions', 
                 'emissions_rate', 'cpu_power', 'gpu_power', 'ram_power', 'cpu_energy',
