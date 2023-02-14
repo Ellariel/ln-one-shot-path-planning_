@@ -58,6 +58,7 @@ def test_path(u, v, amount=100, max_steps=10):
 base_dir = './'
 snapshots_dir = os.path.join(base_dir, 'snapshots')
 results_dir = os.path.join(base_dir, 'weights')
+os.makedirs(results_dir, exist_ok=True)
 
 sample = nx.read_gpickle(os.path.join(snapshots_dir, f'graph-sample-{subgraph}.pickle'))
 G = sample['undirected_graph']
