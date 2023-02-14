@@ -18,9 +18,11 @@ parser.add_argument('--epochs', default=150, type=int)
 parser.add_argument('--timesteps', default=1e4, type=int)
 parser.add_argument('--max_steps', default=10, type=int)
 parser.add_argument('--approach', default='PPO', type=str)
+parser.add_argument('--suffix', default='-', type=str)
 
 args = parser.parse_args()
 
+suffix = args.suffix
 max_steps = args.max_steps
 total_timesteps = args.timesteps
 approach = args.approach
@@ -68,6 +70,9 @@ os.makedirs(results_dir, exist_ok=True)
 sample = nx.read_gpickle(os.path.join(snapshots_dir, f'graph-sample-{subgraph}.pickle'))
 G = sample['undirected_graph']
 print(f"undirected_graph, n: {len(G.nodes)} e: {len(G.edges)}")
+
+sample = nx.read_gpickle(os.path.join(base_dir, f'graph-sample-{subgraph}{suffix}.pickle'))
+
 print('available samples:')
 for i in sample['samples'].keys():
         g = sample['samples'][i]['subgraph']
@@ -75,7 +80,7 @@ for i in sample['samples'].keys():
 print('')
 
 if not change:
-    changes = [k.split('-')[1] for k in sample['samples'][idx].keys() if '-' in k]
+    changes = [k.split(suffix)[1] for k in sample['samples'][idx].keys() if suffix in k]
     changes.remove('1%')
     changes.remove('3%')
     changes.remove('7%')
@@ -85,7 +90,7 @@ else:
     changes = [change]
 
 for c in changes:
-    g = sample['samples'][idx][f'subgraph-{c}']
+    g = sample['samples'][idx][f'subgraph{suffix}{c}']
 
     if k == 'randomized':
         s = sample['samples'][idx]['subgraph_transactions'][k][:1000]
@@ -95,12 +100,12 @@ for c in changes:
         s_ = s
 
     print(f"train {k}: i: {idx}, n: {len(g.nodes)}, e: {len(g.edges)}, max_neighbors: {max_neighbors(g)}")
-    print(f"{k} {len(s)} txs, change: {c}")
+    print(f"{k} {len(s)} txs, change: {suffix}{c}")
     e = LNEnv(g, s, G, max_steps=max_steps)
     e_ = LNEnv(g, [], G, max_steps=max_steps, train=False)
     #check_env(e)
 
-    lf = os.path.join(results_dir, f'{approach}-{k}-{version}-{subgraph}-{idx}-.log')
+    lf = os.path.join(results_dir, f'{approach}-{k}-{version}-{subgraph}-{idx}{suffix}.log')
     log = pd.read_csv(lf, sep=';', compression='zip') if os.path.exists(lf) else None
 
     f = os.path.join(weights_dir, f'{approach}-{k}-{version}-{subgraph}-{idx}.sav')
@@ -165,6 +170,7 @@ for c in changes:
                                                 'e': len(g.edges),
                                                 'max_neighbors':max_neighbors(g),
                                                 'change' : c,
+                                                'suffix' : suffix,
                                                 'best_score' : best_score,
                                                 'base_score' : base_score}, orient='index').T], ignore_index=True)
     log.to_csv(lf, sep=';', index=False, compression='zip')
@@ -197,9 +203,6 @@ for c in changes:
         train_score = train_score / len(s)
         mean_reward = np.mean(e.get_reward())
         print(f'train score: {train_score}, base score: {base_score}, mean_reward: {mean_reward}, epoch: {epoch}/{epochs}, v: {version}')
-        #model.save(f)
-        #model.save(f + f'{train_score:.3f}')
-        #print('saved:', f + f'{train_score:.3f}')
 
         test_score = 0
         if s != s_:
@@ -229,6 +232,7 @@ for c in changes:
                                                 'e': len(g.edges),
                                                 'max_neighbors':max_neighbors(g),
                                                 'change' : c,
+                                                'suffix' : suffix,
                                                 'best_score' : best_score,
                                                 'base_score' : base_score, **em}, orient='index').T], ignore_index=True)
         log.to_csv(lf, sep=';', index=False, compression='zip')
