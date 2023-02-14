@@ -140,7 +140,7 @@ for c in changes:
         if r:
                 train_score += 1
     train_score = train_score / len(s)
-    print(f'pretrain score: {train_score}, base score: {base_score}, epoch: 0/{epochs}, v: {version}')
+    print(f'pretrain score: {train_score}, base score: {base_score}, epoch: 0/{epochs}, v: {version}, c: {suffix}{c}')
 
     test_score = 0
     if s != s_:
@@ -202,7 +202,7 @@ for c in changes:
                 train_score += 1
         train_score = train_score / len(s)
         mean_reward = np.mean(e.get_reward())
-        print(f'train score: {train_score}, base score: {base_score}, mean_reward: {mean_reward}, epoch: {epoch}/{epochs}, v: {version}')
+        print(f'train score: {train_score}, base score: {base_score}, mean_reward: {mean_reward}, epoch: {epoch}/{epochs}, v: {version}, c: {suffix}{c}')
 
         test_score = 0
         if s != s_:
