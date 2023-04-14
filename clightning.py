@@ -10,7 +10,7 @@ class CLightningRouting(Routing):
     DEFAULT_FUZZ = 0.05
 
     def __init__(self, fuzz) -> None:
-        super().__init__(self)
+        super().__init__()
         self.__fuzz = fuzz
 
     def name(self):
