@@ -13,15 +13,11 @@ parser.add_argument('--sample', default=0, type=int)
 parser.add_argument('--subset', default='centralized', type=str)
 parser.add_argument('--subgraph', default=100, type=int)
 parser.add_argument('--epochs', default=300, type=int)
-parser.add_argument('--attempts', default=100, type=int)
 parser.add_argument('--timesteps', default=1e5, type=int)
 parser.add_argument('--max_steps', default=10, type=int)
 parser.add_argument('--attempts', default=100, type=int)
 parser.add_argument('--approach', default='PPO', type=str)
 args = parser.parse_args()
-
-# screen -S xs0c
-# source activate danilaenv && CUDA_VISIBLE_DEVICES=0, python _train.py --sample 0
 
 max_steps = args.max_steps
 total_timesteps = args.timesteps
