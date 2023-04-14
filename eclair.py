@@ -33,7 +33,7 @@ class EclairRouting(Routing):
     AGE_RATIO = 0.35
 
     def __init__(self) -> None:
-        super().__init__(self)
+        super().__init__()
 
     def name(self):
         return "Eclair"
