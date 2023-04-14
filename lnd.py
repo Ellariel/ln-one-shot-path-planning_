@@ -9,7 +9,7 @@ class LNDRouting(Routing):
 
     # Initialize routing algorithm
     def __init__(self) -> None:
-        super().__init__(self)
+        super().__init__()
 
     # human-readable name for routing algorithm
     def name(self):
