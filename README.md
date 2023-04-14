@@ -1,4 +1,4 @@
-## Accepted working paper
+## Working paper
 Danila Valko and Daniel Kudenko (2023).	Increasing Energy Efficiency of Bitcoin Infrastructure with Reinforcement Learning and One-shot Path Planning for the Lightning Network. In Proc. of the Adaptive and Learning Agents Workshop (ALA 2023) at AAMAS 2023, Cruz, Hayes, Wang, Yates (eds.), May 29-30, 2023, London, UK, https://alaworkshop2023.github.io
 
 ## Sources and References
