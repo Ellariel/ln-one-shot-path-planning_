@@ -1,7 +1,8 @@
 ## Working paper
-Danila Valko and Daniel Kudenko (2023).	Increasing Energy Efficiency of Bitcoin Infrastructure with Reinforcement Learning and One-shot Path Planning for the Lightning Network. In Proc. of the Adaptive and Learning Agents Workshop (ALA 2023) at AAMAS 2023, Cruz, Hayes, Wang, Yates (eds.), May 29-30, 2023, London, UK, https://alaworkshop2023.github.io/papers/ALA2023_paper_40.pdf
-#+begin_src bibtex
-@inproceedings{Valko2023,
+### APA
+`Danila Valko and Daniel Kudenko (2023).	Increasing Energy Efficiency of Bitcoin Infrastructure with Reinforcement Learning and One-shot Path Planning for the Lightning Network. In Proc. of the Adaptive and Learning Agents Workshop (ALA 2023) at AAMAS 2023, Cruz, Hayes, Wang, Yates (eds.), May 29-30, 2023, London, UK, https://alaworkshop2023.github.io/papers/ALA2023_paper_40.pdf`
+### BibTeX
+`@inproceedings{Valko2023,
 author = {Danila Valko and Daniel Kudenko},
 title = {Increasing Energy Efficiency of Bitcoin Infrastructure with Reinforcement Learning and One-shot Path Planning for the Lightning Network},
 year = {2023},
@@ -11,8 +12,7 @@ url = {https://alaworkshop2023.github.io/papers/ALA2023_paper_40.pdf},
 booktitle = {Proc. of the Adaptive and Learning Agents Workshop (ALA 2023) at AAMAS 2023, May 29-30},
 location = {London, UK},
 series = {ALA 2023}
-}
-#+end_src
+}`
 
 ## Sources and References
 * Native pathfinding algorithms are based on [(Kumble & Roos, 2021)](https://ieeexplore.ieee.org/document/9566199); [(Kumble, Epema & Roos, 2021)](https://arxiv.org/pdf/2107.10070.pdf); see also, [GitHub](https://github.com/SatwikPrabhu/Attacking-Lightning-s-anonymity).
