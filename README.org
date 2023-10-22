@@ -4,7 +4,7 @@
 
 #+end_abstract
 
-** Increasing Energy Efficiency of Bitcoin Infrastructure with Reinforcement Learning and One-shot Path Planning for the Lightning Network
+* Increasing Energy Efficiency of Bitcoin Infrastructure with Reinforcement Learning and One-shot Path Planning for the Lightning Network
 
 ** Working paper
 *** APA
